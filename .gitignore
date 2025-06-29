@@ -3,6 +3,8 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+./matrix_display
+
 # C extensions
 *.so
 
