@@ -1,10 +1,10 @@
 
 
-from exercises import ex00
+from exercises import ex01
 
 
 def main():
-    ex00()
+    ex01()
 
 if __name__ == "__main__":
     main()
