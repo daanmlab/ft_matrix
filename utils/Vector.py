@@ -27,8 +27,9 @@ class Vector(BaseModel, Generic[T]):
         """
         Adds another vector to this vector.
         """
-        return self + other
-    
+        self.data = (self + other).data
+        return self
+
     def __sub__(self, other: "Vector[T]") -> "Vector[T]":
         if len(self) != len(other):
             raise ValueError("Vectors must be of the same length to subtract")
@@ -38,16 +39,18 @@ class Vector(BaseModel, Generic[T]):
         """
         Subtracts another vector from this vector.
         """
-        return self - other
-    
+        self.data = (self - other).data
+        return self
+
     def __mul__(self, scalar: T) -> "Vector[T]":
         """
         Multiplies this vector by a scalar.
         """
         return Vector[T](data=[x * scalar for x in self.data]) # type: ignore
 
-    def mul(self, scalar: T) -> "Vector[T]":
+    def scl(self, scalar: T) -> "Vector[T]":
         """
-        Multiplies this vector by a scalar.
+        Scales this vector by a scalar.
         """
-        return self * scalar
+        self.data = (self * scalar).data
+        return self
