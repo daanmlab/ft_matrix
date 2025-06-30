@@ -1,10 +1,9 @@
-
-
-from exercises import ex01
+from exercises import ex03
 
 
 def main():
-    ex01()
+    ex03()
+
 
 if __name__ == "__main__":
     main()

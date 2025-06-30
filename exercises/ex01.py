@@ -1,6 +1,5 @@
-
-
-from utils import Vector, linear_combination
+from utils.Vector import Vector
+from utils.funcs import linear_combination
 
 
 def ex01():
@@ -9,9 +8,7 @@ def ex01():
         Vector(data=[0, 1, 0]),
         Vector(data=[0, 0, 1]),
     ]
-    coefficients: list[float] = [
-        3, -5, 9
-    ]
+    coefficients: list[float] = [3, -5, 9]
     print("vectors      : ", vectors)
     print("coefficients : ", coefficients)
     print("result       : ", linear_combination(vectors, coefficients))

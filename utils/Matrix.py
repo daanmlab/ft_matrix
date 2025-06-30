@@ -1,12 +1,14 @@
-from typing import TypeVar, Generic
+from typing import Generic
 from pydantic import BaseModel
 
-T = TypeVar("T")
+from utils.constants import T
+
 
 class Matrix(BaseModel, Generic[T]):
     """
     A simple matrix class that holds a list of lists of T.
     """
+
     data: list[list[T]]
 
     def __init__(self, data: list[list[T]]):
@@ -24,12 +26,17 @@ class Matrix(BaseModel, Generic[T]):
 
     def __len__(self) -> int:
         return len(self.data)
-    
+
     def __add__(self, other: "Matrix[T]") -> "Matrix[T]":
         if len(self) != len(other) or len(self[0]) != len(other[0]):
             raise ValueError("Matrices must be of the same dimensions to add")
-        return Matrix[T](data=[[self[i][j] + other[i][j] for j in range(len(self[0]))] for i in range(len(self))]) # type: ignore
-    
+        return Matrix[T](
+            data=[
+                [self[i][j] + other[i][j] for j in range(len(self[0]))]
+                for i in range(len(self))
+            ]
+        )  # type: ignore
+
     def add(self, other: "Matrix[T]") -> "Matrix[T]":
         """
         Adds another matrix to this matrix.
@@ -40,8 +47,13 @@ class Matrix(BaseModel, Generic[T]):
     def __sub__(self, other: "Matrix[T]") -> "Matrix[T]":
         if len(self) != len(other) or len(self[0]) != len(other[0]):
             raise ValueError("Matrices must be of the same dimensions to subtract")
-        return Matrix[T](data=[[self[i][j] - other[i][j] for j in range(len(self[0]))] for i in range(len(self))]) # type: ignore
-    
+        return Matrix(
+            data=[
+                [self[i][j] - other[i][j] for j in range(len(self[0]))]
+                for i in range(len(self))
+            ]
+        )
+
     def sub(self, other: "Matrix[T]") -> "Matrix[T]":
         """
         Subtracts another matrix from this matrix.
@@ -53,8 +65,8 @@ class Matrix(BaseModel, Generic[T]):
         """
         Multiplies this matrix by a scalar.
         """
-        return Matrix[T](data=[[x * scalar for x in row] for row in self.data]) # type: ignore
-    
+        return Matrix[T](data=[[x * scalar for x in row] for row in self.data])  # type: ignore
+
     def scl(self, scalar: T) -> "Matrix[T]":
         """
         Scales this matrix by a scalar.
