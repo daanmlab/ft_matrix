@@ -33,3 +33,13 @@ def linear_combination(vectors: list[Vector[T]], coefficients: list[T]) -> Vecto
 
 def angle_cos(v: Vector, u: Vector) -> float:
     return (v.dot(u)) / (v.norm() * u.norm())
+
+
+def cross_product(v: Vector, u: Vector) -> Vector:
+    return Vector(
+        data=[
+            (v[1] * u[2] - v[2] * u[1]),
+            (v[2] * u[0] - v[0] * u[2]),
+            (v[0] * u[1] - v[1] * u[0]),
+        ]
+    )
