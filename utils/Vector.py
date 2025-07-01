@@ -1,3 +1,4 @@
+from math import sqrt
 from typing import Generic
 from pydantic import BaseModel
 
@@ -64,3 +65,12 @@ class Vector(BaseModel, Generic[T]):
         if len(self) != len(v):
             raise ValueError("Vectors must be of the same length to subtract")
         return sum([(self[i] * v[i]) for i in range(len(self))])
+
+    def norm_1(self) -> float:
+        return sum([abs(x) for x in self.data])
+    
+    def norm(self, n: T = 2) -> float:
+        return sqrt(sum([pow(abs(x), n) for x in self.data]))
+    
+    def norm_inf(self) -> float:
+        return max([abs(x) for x in self.data])
