@@ -1,8 +1,8 @@
-from exercises import ex07
+from exercises import ex08
 
 
 def main():
-    ex07()
+    ex08()
 
 
 if __name__ == "__main__":
