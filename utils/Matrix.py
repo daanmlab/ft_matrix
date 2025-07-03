@@ -102,3 +102,8 @@ class Matrix(BaseModel, Generic[T]):
         if ((size := len(self)) != len(self.data[0])):
             raise ValueError("Cannot get trace of non square matrix")
         return sum([self.data[i][i] for i in range(size)], cast(T, 0))
+
+    def transpose(self) -> "Matrix[T]":
+        return Matrix(data=[
+            v.data for v in self.to_vectors()
+        ])
