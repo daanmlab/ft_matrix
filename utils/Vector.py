@@ -20,6 +20,10 @@ class Vector(BaseModel, Generic[T]):
 
     def __getitem__(self, index: int) -> T:
         return self.data[index]
+    
+    def __setitem__(self, index: int, val: T) -> T:
+        self.data[index] = val
+        return self.data[index]
 
     def __len__(self) -> int:
         return len(self.data)
