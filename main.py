@@ -1,10 +1,10 @@
 
 
-from exercises import ex11
+from exercises import ex12
 
 
 def main():
-    ex11()
+    ex12()
 
 
 

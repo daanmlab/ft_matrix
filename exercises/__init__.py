@@ -10,6 +10,7 @@ from .ex08 import ex08
 from .ex09 import ex09
 from .ex10 import ex10
 from .ex11 import ex11
+from .ex12 import ex12
 
 assert ex00 is not None, "ex00 function should be defined in exercises.ex00"
 assert ex01 is not None, "ex01 function should be defined in exercises.ex01"
@@ -23,3 +24,4 @@ assert ex08 is not None, "ex08 function should be defined in exercises.ex08"
 assert ex09 is not None, "ex09 function should be defined in exercises.ex09"
 assert ex10 is not None, "ex10 function should be defined in exercises.ex10"
 assert ex11 is not None, "ex11 function should be defined in exercises.ex11"
+assert ex12 is not None, "ex12 function should be defined in exercises.ex12"
