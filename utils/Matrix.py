@@ -1,4 +1,4 @@
-from typing import Generic, Literal, cast
+from typing import Generic, cast
 from pydantic import BaseModel
 
 from utils.Vector import Vector
@@ -132,51 +132,61 @@ class Matrix(BaseModel, Generic[T]):
     def transpose(self) -> "Matrix[T]":
         return Matrix(data=[v.data for v in self.to_vectors()])
 
+    def row_echelon(self) -> tuple["Matrix[T]", T]:
+        # Gaussian elimination
+        A = self.copy(deep=True).to_rows_as_vectors()
+        n = len(A)
+        sign: T = cast(T, 1)
+
+        for i in range(n):
+            if A[i][i] == 0: # find row to swap if necesary
+                for j in range(i + 1, n):
+                    if A[j][i] != 0:
+                        A[j], A[i] = A[i], A[j]
+                        sign *= -1
+                        break
+
+            for j in range(i + 1, n): # eliminate all rows underneath
+                factor: T = cast(T, A[j][i] / A[i][i])
+                A[j] -= A[i] * factor
+
+
+        return (Matrix.from_rows_as_vectors(A), sign)
+
     def reduced_row_echelon(self) -> "Matrix[T]":
         # Gauss-Jordan elimination
-        A = self.copy(deep=True).to_rows_as_vectors()
-        pivot_columns = []
+        A = self.row_echelon()[0].to_rows_as_vectors()
 
+        rows, cols = len(A), len(A[0])
 
-        def find_pivot(y=0, x=0) -> Coords | Literal[False]:
-            for _x in range(x, len(A[0])):
-                for _y in range(y, len(A)):
-                    if A[_y][_x] != 0:
-                        return Coords(y=_y, x=_x)
-            return False
-        def swap_rows(i: int, j: int):
-            A[i], A[j] = A[j], A[i]
+        # Work from bottom to top
+        for i in reversed(range(rows)):
+            # Find pivot (first non-zero in row i)
+            row = A[i]
+            pivot_col = None
+            for j in range(cols):
+                if row[j] != 0:
+                    pivot_col = j
+                    break
 
-        # Forward phase (REF)
-        for y in range(len(A)):
-            c = find_pivot(y=y)
-            if c is False:
-                continue
-            swap_rows(c.y, y)
-            pivot_columns.append(c.x)
+            if pivot_col is None:
+                continue  # skip all-zero row
 
-            # Normalize current row
-            pivot_value = A[y][c.x]
-            for x in range(c.x, len(A[y])):
-                A[y][x] = cast(T, A[y][x] / pivot_value)
-
-            # Eliminate below
-            for r in range(y + 1, len(A)):
-                factor = A[r][c.x]
-                A[r] -= A[y] * factor
-
-
-        # Backward phase (RREF)
-        for y in range(len(A) - 1, -1, -1):
-            # Find pivot
-            if y >= len(pivot_columns):
-                continue
-            p = pivot_columns[y]
+            # Normalize the pivot to 1
+            pivot_val = A[i][pivot_col]
+            A[i] *= cast(T, 1 / pivot_val)
 
             # Eliminate above
-            for y_i in range(y - 1, -1, -1):
-                factor = A[y_i][p]
-                A[y_i] -= A[y] * factor
-
+            for k in range(i):
+                factor = A[k][pivot_col]
+                A[k] -= A[i] * factor
 
         return Matrix.from_rows_as_vectors(A)
+
+    def det(self) -> T:
+        (A, det) = self.row_echelon()
+
+        for i in range(len(A)):
+            det *= A[i][i]
+
+        return det
