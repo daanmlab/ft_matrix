@@ -190,3 +190,32 @@ class Matrix(BaseModel, Generic[T]):
             det *= A[i][i]
 
         return det
+    
+    def identity(self) ->  "Matrix[T]":
+        if len(self.data) != len(self.data[0]):
+            raise ValueError("Matrix not square")
+        n = len(self.data)
+        m = Matrix[T](data=
+            [[cast(T, 0)] * n]*n
+        )
+        for i in range(n):
+            m.data[i][i] = cast(T, 1)
+        return m
+
+    def inverse(self) -> "Matrix[T]":
+        aug = self.copy(deep=True)
+        id = self.identity()
+        n = len(self.data)
+
+        for i in range(n):
+            aug.data[i] += id.data[i]
+
+        rref = aug.reduced_row_echelon()
+
+        for i in range(n):
+            rref.data[i] = rref.data[i][n:]
+        
+        return rref
+
+
+
