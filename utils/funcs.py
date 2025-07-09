@@ -9,7 +9,7 @@ K = TypeVar("K", Vector, Matrix)
 
 
 def lerp(v: K, u: K, t: T) -> K:
-    return (v * t) + (u * (1 - t))
+    return (v * (1 - t)) + (u * t)
 
 
 def linear_combination(vectors: list[Vector[T]], coefficients: list[T]) -> Vector[T]:
