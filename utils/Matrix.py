@@ -216,6 +216,14 @@ class Matrix(BaseModel, Generic[T]):
             rref.data[i] = rref.data[i][n:]
         
         return rref
+    
+    def rank(self) -> int:
+        (A, _s) = self.row_echelon()
+        n = len(A.data)
 
+        for i in range(n):
+            if (all([x == 0 for x in A.data[i]])):
+                return i
+        return n
 
 
