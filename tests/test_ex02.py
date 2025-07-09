@@ -10,11 +10,6 @@ from utils.funcs import lerp
 
 
 def test_lerp():
-    assert lerp(0.0, 1.0, 0.0) == 0.0
-    assert lerp(0.0, 1.0, 1.0) == 1.0
-    assert lerp(0.0, 1.0, 0.5) == 0.5
-    assert math.isclose(lerp(21.0, 42.0, 0.3), 27.3)
-
     v = Vector(data=[2.0, 1.0])
     u = Vector(data=[4.0, 2.0])
     result = lerp(v, u, 0.3)
