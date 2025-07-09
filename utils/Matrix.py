@@ -135,28 +135,28 @@ class Matrix(BaseModel, Generic[T]):
     def row_echelon(self) -> tuple["Matrix[T]", T]:
         # Gaussian elimination
         A = self.copy(deep=True).to_rows_as_vectors()
-        n = len(A)
+        rows, cols = len(A), len(A[0])
         sign: T = cast(T, 1)
 
-        for i in range(n):
+        for i in range(min(rows, cols)):
             if A[i][i] == 0: # find row to swap if necesary
-                for j in range(i + 1, n):
+                for j in range(i + 1, rows):
                     if A[j][i] != 0:
                         A[j], A[i] = A[i], A[j]
                         sign *= -1
                         break
+            if A[i][i] == 0: # if still zero, skip this row
+                continue
 
-            for j in range(i + 1, n): # eliminate all rows underneath
+            for j in range(i + 1, rows): # eliminate all rows underneath
                 factor: T = cast(T, A[j][i] / A[i][i])
                 A[j] -= A[i] * factor
-
 
         return (Matrix.from_rows_as_vectors(A), sign)
 
     def reduced_row_echelon(self) -> "Matrix[T]":
         # Gauss-Jordan elimination
         A = self.row_echelon()[0].to_rows_as_vectors()
-
         rows, cols = len(A), len(A[0])
 
         # Work from bottom to top
@@ -219,7 +219,7 @@ class Matrix(BaseModel, Generic[T]):
     
     def rank(self) -> int:
         (A, _s) = self.row_echelon()
-        n = len(A.data)
+        n = min(len(A.data[0]),len(A.data))
 
         for i in range(n):
             if (all([x == 0 for x in A.data[i]])):
