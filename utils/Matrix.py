@@ -86,10 +86,7 @@ class Matrix(BaseModel, Generic[T]):
         return self
 
     def to_vectors(self) -> list[Vector[T]]:
-        vector_size = len(self.data)
-        _data = sum(self.data, [])
-        step = len(_data) // vector_size
-        return [Vector(data=_data[i::step]) for i in range(step)]
+        return [Vector(data=list(col)) for col in zip(*self.data)]
 
     def to_rows_as_vectors(self) -> list[Vector[T]]:
         return [Vector(data=x) for x in self.data]
@@ -130,7 +127,7 @@ class Matrix(BaseModel, Generic[T]):
         return sum([self.data[i][i] for i in range(size)], cast(T, 0))
 
     def transpose(self) -> "Matrix[T]":
-        return Matrix(data=[v.data for v in self.to_vectors()])
+        return Matrix(data=[list(col) for col in zip(*self.data)])
 
     def row_echelon(self) -> tuple["Matrix[T]", T]:
         # Gaussian elimination
